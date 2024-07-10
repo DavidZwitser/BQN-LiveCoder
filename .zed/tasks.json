@@ -1,0 +1,9 @@
+[
+  {
+    "label": "Run LIVE_CODER",
+    "command": "bqn -f ./LIVE_CODER.bqn",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": true
+    // "cwd": "$ZED_DIR_NAME"
+  }
+]

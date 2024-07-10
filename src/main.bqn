@@ -1,5 +1,6 @@
 # LINK RAYLIB HERE ↓
-⟨color, win⇐window, d⇐draw, key, m⇐mouse, rayffi⟩←r←•Import "../../rayed-bqn/raylib.bqn"
+⟨color, win⇐window, d⇐draw, key, m⇐mouse⟩←r←•Import "../rayed-bqn/rayed.bqn"
+rayffi ← •Import "../rayed-bqn/ffi/raylib.bqn"
 operators ← •Import"./operations.bqn"
 ⟨TextEditor⟩ ← •Import "./TextEditor.bqn"
 ⟨RepeatKey, ErrorSafe⟩ ← •Import "./Utility.bqn"
@@ -45,6 +46,7 @@ curve ← {
 }
 
 LFOInterface ← {𝕊:
+
 	# Curve values
 	freq ← 1
 	phase_shift ← 0
@@ -170,7 +172,7 @@ DynamicNums ← {𝕊e‿char_size:
 		;@}
 		{(type≡lfo) ∨ type≡shift ?
 			xy ← e.CursorXY t‿start
-			color.gray d.Rectangle •SHow ⌊(xy×char_size) (⊣≍+) (xy+0‿(length×1⊑char_size)×char_size)
+			color.gray d.Rectangle ⌊(xy×char_size) (⊣≍+) (xy+0‿(length×1⊑char_size)×char_size)
 		;@}
 	}
 }
@@ -249,7 +251,7 @@ RaylibTextEditor ← {𝕊 ⟨font ⋄ font_size ⋄ default_text⟩:
 		(r.clipboard.Set∘e.Line t‿c˙)⍟((key.IsDown key.left_super) ∧ key.IsPressed key.c)@
 		{𝕊: t‿c e.RemoveLine ↩}⍟((key.IsDown key.left_super) ∧ key.IsPressed key.x)@
 
-		("./save.bqn"⊸•file.Chars t˙)⍟((key.IsDown key.left_super) ∧ key.IsPressed key.s)@
+		("../data/save_file.bqn"⊸•file.Chars t˙)⍟((key.IsDown key.left_super) ∧ key.IsPressed key.s)@
 		t‿c
 	}
 
@@ -276,7 +278,7 @@ font ← @
 _Start ← { Update _𝕣 𝕩:
 	win.SetSize w_size ← 1200‿1200
 	font ↩ r.font.LoadBQN 300 #⋄ win.SetPos ¯2000‿¯900
-	editor ← RaylibTextEditor font‿30‿(•file.Chars "./save.bqn")
+	editor ← RaylibTextEditor font‿30‿(•file.Chars "../data/save_file.bqn")
 
 	Update editor‿⟨@⋄@⟩‿1
 }
@@ -305,7 +307,6 @@ DrawShapes ← {
 	@
 		# c d.Line ⌊data
 }
-
 
 parse‿call‿get‿draw ← ErrorSafe¨ "Parse: "‿"Call: "‿"Update: "‿"Draw: "
 clock ← r.StartClock @

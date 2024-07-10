@@ -4,7 +4,7 @@ TextEditor ⇐ {ch‿skip_chars:
 
 	# Type stuff
 	Type ⇐ {
-		char𝕊t‿c: ⟨nt← char⊸∾⌾(c⊸⌽) t ⋄ 1‿0 Move nt‿c ⟩
+		char𝕊t‿c: ⟨nt← char⊸∾⌾(c⊸⌽) t ⋄ 1‿0 Move nt‿c⟩
 	}
 	Remove ⇐ {
 		amount𝕊t‿c: {0≤c-amount ? ⟨amount⊸↓⌾((c-amount)⊸⌽) t ⋄ (-amount)‿0 Move t‿c⟩ ; t‿c }
@@ -21,14 +21,15 @@ TextEditor ⇐ {ch‿skip_chars:
 		⟨((((LineStart 𝕩)↑t) ∾ (1+LineEnd 𝕩)↓t)) ⋄ c⟩
 	}
 
+
 	# Swap Lines and Chars
 	SwapR ← {⌽⌾(2⊸↑𝕨⊸↓)𝕩}
 	SwapL ← {⌽⌾(¯2⊸↑(𝕨+1)⊸↑)𝕩}
 	Swap ⇐ {
 		1‿0𝕊t‿c: {(c+1)<≠t ? ⟨c SwapR t ⋄ 1‿0 Move t‿c⟩ ; t‿c };
-	   ¯1‿0𝕊t‿c: {((c-1)≥0)∧(c)<≠t ? ⟨c SwapL t ⋄ ¯1‿0 Move t‿c⟩ ; t‿c };
+	  ¯1‿0𝕊t‿c: {((c-1)≥0)∧(c)<≠t ? ⟨c SwapL t ⋄ ¯1‿0 Move t‿c⟩ ; t‿c };
 		0‿y𝕊t‿c:
-			cx‿cy ← CursorXY t‿c ⋄ lines ← ch.enter Split t
+			cx‿cy ← CursorXY t‿c ⋄ lines ← 𝕊 ch.enter Split t
 			{(≥⟜0 ∧ <⟜(≠lines)) cy+y ? # Does the target line exist?
 				new_t ← ∾∾⟜ch.enter¨ (y≡1)◶⟨cy⊸SwapL, cy⊸SwapR⟩ lines
 				⟨new_t ⋄ cx‿(cy+y) XYCursor new_t⟩
@@ -38,13 +39,13 @@ TextEditor ⇐ {ch‿skip_chars:
 	# Scope cursor to interesting places
 	Scope ⇐ { # Returns the distance to the target
 		1𝕊t‿c: -⟜c (0<≠)◶⟨0,{c+1+⊑𝕩}⟩ /¬ ∊⟜skip_chars (c+1)↓t ;
-	   ¯1𝕊t‿c: -⟜c {(0<≠)◶⟨0,{⊑⌽𝕩}⟩ /¬ ∊⟜skip_chars 𝕩↑t} c
+	  ¯1𝕊t‿c: -⟜c {(0<≠)◶⟨0,{⊑⌽𝕩}⟩ /¬ ∊⟜skip_chars 𝕩↑t} c
 	}
 
 	# Move to one of the outer bounds of the text
 	Bounds ⇐ { # Returns the distance to the target
 		1‿0𝕊t‿c: -⟜c LineEnd 𝕩;
-	   ¯1‿0𝕊t‿c: -⟜c LineStart 𝕩;
+	  ¯1‿0𝕊t‿c: -⟜c LineStart 𝕩;
 		0‿y𝕊t‿c: -⟜c y×≠t
 	}
 
