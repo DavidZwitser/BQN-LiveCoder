@@ -19,10 +19,16 @@
     in rec {
 
       packages.default = pkgs.writeShellScriptBin "run" /*bash*/ ''
+        # Loading the submodules
+        git submodule update --init --recursive
+        # (cd ./rayed-bqn; git submodule update --init --recursive)
+
+        # Overwriting the default raylib loading
         echo "raylibheaderpath ⇐ •file.At \"${raylib}/include/raylib.h\"" > ./rayed-bqn/config.bqn
         echo "rayliblibpath ⇐ •file.At \"${raylib}/lib/libraylib.dylib\"" >> ./rayed-bqn/config.bqn
+        echo "⟨raylibheaderpath ⋄ rayliblibpath⟩ ⇐ •Import \"../config.bqn\"" > ./rayed-bqn/src/loadConfig.bqn
 
-        (cd ./rayed-bqn; git submodule update --init --recursive)
+        # Running the program
      	  ${cbqn}/bin/bqn -f ./src/main.bqn
       '';
 
